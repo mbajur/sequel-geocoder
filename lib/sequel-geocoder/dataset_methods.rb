@@ -8,7 +8,7 @@ module Sequel::Plugins::Geocoder
     # See Geocoder::Store::ActiveRecord.included generated scope.
     def geocoded
       where(
-        Sequel.~(model.latitude_column] => nil),
+        Sequel.~(model.latitude_column => nil),
         Sequel.~(model.longitude_column => nil)
       )
     end
