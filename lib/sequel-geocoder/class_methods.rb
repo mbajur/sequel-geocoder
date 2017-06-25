@@ -8,7 +8,7 @@ module Sequel::Plugins::Geocoder
     attr_reader :latitude_column
     attr_reader :longitude_column
     
-    Plugins.inherited_instance_variables(self,
+    Sequel::Plugins.inherited_instance_variables(self,
           :@latitude_column=>nil,
           :@longitude_column=>nil)
 
