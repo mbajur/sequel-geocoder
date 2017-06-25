@@ -5,8 +5,8 @@ module Sequel::Plugins
   module Geocoder
     def self.configure(model, opts={})
       model.instance_eval do
-        @geocoder_options[:latitude] = opts[:latitude] || 'latitude'
-        @geocoder_options[:longitude] = opts[:longitude] || 'longitude'
+        @latitude_column = opts[:latitude_column] || 'latitude'
+        @longitude_column = opts[:longitude_column] || 'longitude'
       end
     end
   end
