@@ -4,6 +4,13 @@ require 'geocoder/models/active_record'
 module Sequel::Plugins::Geocoder
   module ClassMethods
     include ::Geocoder::Model::ActiveRecord
+    
+    attr_reader :latitude_column
+    attr_reader :longitude_column
+    
+    Plugins.inherited_instance_variables(self,
+          :@latitude_column=>nil,
+          :@longitude_column=>nil)
 
     # Include some of the dataset methods in the model class itself.
     [
