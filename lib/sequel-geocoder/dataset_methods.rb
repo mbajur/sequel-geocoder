@@ -15,8 +15,8 @@ module Sequel::Plugins::Geocoder
 
     # See Geocoder::Store::ActiveRecord.included generated scope.
     def not_geocoded
-      where(geocoder_options[:latitude] => nil)
-      .or(geocoder_options[:longitude] => nil)
+      where(model.latitude_column => nil)
+      .or(model.longitude_column => nil)
     end
 
     # See Geocoder::Store::ActiveRecord.included generated scope.
@@ -36,7 +36,7 @@ module Sequel::Plugins::Geocoder
       if sw_lat && sw_lng && ne_lat && ne_lng
         where(
           Geocoder::Sql.within_bounding_box(
-            sw_lat, sw_lng, ne_lat, ne_lng, 'lat', 'lng'
+            sw_lat, sw_lng, ne_lat, ne_lng, model.latitude_column, model.longitude_column
           )
         )
       else
@@ -59,7 +59,7 @@ module Sequel::Plugins::Geocoder
     # the +:select+ and +:order+ options take an array of objects suitable to
     # use in a Sequel::Dataset.
     def geocoder_near_ds(latitude, longitude, radius = 20, options = {})
-      options[:units] ||= (geocoder_options[:units] || Geocoder.config.units)
+      options[:units] ||= (model.units || Geocoder.config.units)
       options[:units] = options[:units].to_sym if options[:units]
       options[:exclude] = options[:exclude].pk if options[:exclude].respond_to?(:pk)
 
@@ -82,8 +82,8 @@ module Sequel::Plugins::Geocoder
         Sql.within_bounding_box(
           *Geocoder::Calculations.bounding_box([latitude, longitude], radius, options)
         ),
-        latitude: geocoder_options[:latitude],
-        longitude: geocoder_options[:longitude]
+        latitude: model.latitude_column,
+        longitude: model.longitude_column
       )
 
       # TODO: It seems like there is a better way of handling this without using
@@ -131,8 +131,8 @@ module Sequel::Plugins::Geocoder
           :"#{geocoder_method_prefix}_#{method_postfix}",
           latitude, longitude, options
         ), {
-          latitude: geocoder_options[:latitude],
-          longitude: geocoder_options[:longitude]
+          latitude: model.latitude_column,
+          longitude: model.longitude_column
         }, { parens: true }
       )
     end
